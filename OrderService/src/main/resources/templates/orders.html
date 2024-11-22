@@ -88,6 +88,18 @@
             <td th:text="${order.quantity}">3</td>
             <td th:text="${order.priceAtOrder}">5000</td>
             <td th:text="${order.orderDate}">2024-11-21T16:50:00</td>
+            <td>
+                <!-- 수정 버튼 -->
+                <form th:action="@{/orders/change}" method="get" style="display:inline;">
+                    <input type="hidden" name="orderId" th:value="${order.id}"/>
+                    <button type="submit">Edit</button>
+                </form>
+                <!-- 삭제 버튼 -->
+                <form th:action="@{/orders/delete}" method="post" style="display:inline;">
+                    <input type="hidden" name="orderId" th:value="${order.id}"/>
+                    <button type="submit" onclick="return confirm('Are you sure you want to delete this order?');">Delete</button>
+                </form>
+            </td>
         </tr>
         </tbody>
     </table>

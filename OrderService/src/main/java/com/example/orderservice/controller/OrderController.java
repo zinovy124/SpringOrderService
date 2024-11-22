@@ -37,4 +37,19 @@ public class OrderController {
         modelAndView.addObject("orders", orderService.getAllOrders());
         return modelAndView;
     }
+
+    @GetMapping("/change")
+    public ModelAndView showChangeOrderForm(@RequestParam Integer orderId) {
+        OrderDto order = orderService.getOrderById(orderId);
+        ModelAndView modelAndView = new ModelAndView("change");
+        modelAndView.addObject("order", order);
+        return modelAndView;
+    }
+
+    @PostMapping("/delete")
+    public RedirectView deleteOrder(@RequestParam Integer orderId) {
+        OrderDto orderDto = orderService.getOrderById(orderId);
+        orderService.deleteOrder(orderDto);
+        return new RedirectView("/orders");
+    }
 }
