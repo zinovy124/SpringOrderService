@@ -43,13 +43,12 @@ public class OrderService {
         orderRepository.delete(order);
     }
 
-    public OrderDto changeOrder(OrderDto orderDto) {
+    public void changeOrder(OrderDto orderDto) {
         User user = userRepository.findById(orderDto.userId()).orElseThrow(() -> new RuntimeException("User Not Found"));
         Menu menu = menuRepository.findById(orderDto.menuId()).orElseThrow(() -> new RuntimeException("Menu not found"));
 
         Order newOrder = OrderDto.toEntity(orderDto, user, menu);
         orderRepository.save(newOrder);
-        return OrderDto.fromEntity(newOrder);
     }
 
     public List<OrderDto> getAllOrders() {

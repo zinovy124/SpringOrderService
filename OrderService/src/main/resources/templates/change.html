@@ -30,7 +30,7 @@
         <input type="number" id="priceAtOrder" name="priceAtOrder" th:value="${order.priceAtOrder}" required />
 
         <label for="orderDate">Order Date:</label>
-        <input type="datetime-local" id="orderDate" name="orderDate" th:value="${order.orderDate != null ? #dates.format(order.orderDate, 'yyyy-MM-dd\'T\'HH:mm') : ''}" required />
+        <input type="datetime-local" id="orderDate" name="orderDate" th:value="${formattedDate}" required />
 
         <button type="submit">Save Changes</button>
     </form>

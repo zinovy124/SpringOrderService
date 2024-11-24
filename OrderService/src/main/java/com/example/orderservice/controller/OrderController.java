@@ -1,6 +1,8 @@
 package com.example.orderservice.controller;
 
 import com.example.orderservice.dto.OrderDto;
+import com.example.orderservice.entity.Order;
+import com.example.orderservice.repository.OrderRepository;
 import com.example.orderservice.service.OrderService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -41,9 +44,21 @@ public class OrderController {
     @GetMapping("/change")
     public ModelAndView showChangeOrderForm(@RequestParam Integer orderId) {
         OrderDto order = orderService.getOrderById(orderId);
+        String formattedDate = order.orderDate() != null
+                ? order.orderDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"))
+                : "";
         ModelAndView modelAndView = new ModelAndView("change");
         modelAndView.addObject("order", order);
+        modelAndView.addObject("formattedDate", formattedDate);
         return modelAndView;
+    }
+
+    @PostMapping("/change")
+    public RedirectView redirectAfterChange(@ModelAttribute OrderDto orderDto) {
+        OrderDto oldOrder = orderService.getOrderById(orderDto.id());
+        orderService.deleteOrder(oldOrder);
+        orderService.changeOrder(orderDto);
+        return new RedirectView("/orders");
     }
 
     @PostMapping("/delete")
