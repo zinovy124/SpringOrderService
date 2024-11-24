@@ -13,7 +13,7 @@ public record OrderDto(
         Integer menuId,
         int quantity,
         int priceAtOrder,
-        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+        @DateTimeFormat(pattern = "yyyy-MM-dd\'T\'HH:mm")
         LocalDateTime orderDate
 ) {
     public static OrderDto fromEntity(Order order) {
