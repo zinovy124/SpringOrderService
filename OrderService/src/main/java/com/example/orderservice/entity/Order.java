@@ -55,4 +55,11 @@ public class Order {
     public LocalDateTime getOrderDate() {
         return orderDate;
     }
+
+    public void updateOrder(Order newOrder) {
+        this.menu = newOrder.getMenu();
+        this.quantity = newOrder.getQuantity();
+        this.priceAtOrder = newOrder.getPriceAtOrder();
+        this.orderDate = newOrder.getOrderDate();
+    }
 }
