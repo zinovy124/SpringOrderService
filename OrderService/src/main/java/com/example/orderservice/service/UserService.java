@@ -18,4 +18,8 @@ public class UserService {
         userRepository.save(user);
         return UserDto.fromEntity(user);
     }
+
+    public User findUserById(Integer id) {
+        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User Not Found"));
+    }
 }

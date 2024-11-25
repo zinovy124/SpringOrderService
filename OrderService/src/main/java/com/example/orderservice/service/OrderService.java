@@ -43,17 +43,13 @@ public class OrderService {
         orderRepository.delete(order);
     }
 
-    public void changeOrder(OrderDto oldOrder, OrderDto newOrder) {
-        User user = userRepository.findById(oldOrder.userId()).orElseThrow(() -> new RuntimeException("User Not Found"));
-        Menu oldMenu = menuRepository.findById(oldOrder.menuId()).orElseThrow(() -> new RuntimeException("Menu not found"));
-        Menu newMenu = menuRepository.findById(newOrder.menuId()).orElseThrow(() -> new RuntimeException("Menu not Found"));
+    public void changeOrder(OrderDto newOrder) {
+        User user = userRepository.findById(newOrder.userId()).orElseThrow(() -> new RuntimeException("User Not Found"));
+        Menu newMenu = menuRepository.findById(newOrder.menuId()).orElseThrow(() -> new RuntimeException("Menu Not Found"));
 
-        Order oldOrderEntity = OrderDto.toEntity(oldOrder, user, oldMenu);
         Order newOrderEntity = OrderDto.toEntity(newOrder, user, newMenu);
-
-        oldOrderEntity.updateOrder(newOrderEntity);
-
-        orderRepository.save(oldOrderEntity);
+        newOrderEntity.updateOrder(newOrder, user, newMenu);
+        orderRepository.save(newOrderEntity);
     }
 
     public List<OrderDto> getAllOrders() {
@@ -64,8 +60,6 @@ public class OrderService {
 
     public OrderDto getOrderById(Integer orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Order Not Found"));
-        System.out.println("Order loaded: " + order.getId());
-        System.out.println("Menu: " + order.getMenu().getName());
         return OrderDto.fromEntity(order);
     }
 }

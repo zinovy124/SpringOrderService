@@ -1,6 +1,7 @@
 package com.example.orderservice.entity;
 
 import com.example.orderservice.dto.OrderDto;
+import com.example.orderservice.service.UserService;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -56,10 +57,12 @@ public class Order {
         return orderDate;
     }
 
-    public void updateOrder(Order newOrder) {
-        this.menu = newOrder.getMenu();
-        this.quantity = newOrder.getQuantity();
-        this.priceAtOrder = newOrder.getPriceAtOrder();
-        this.orderDate = newOrder.getOrderDate();
+    public void updateOrder(OrderDto newOrder, User user, Menu menu) {
+        this.id = newOrder.id();
+        this.user = user;
+        this.menu = menu;
+        this.quantity = newOrder.quantity();
+        this.priceAtOrder = newOrder.priceAtOrder();
+        this.orderDate = newOrder.orderDate();
     }
 }
