@@ -55,9 +55,14 @@ public class OrderController {
 
     @PostMapping("/change")
     public RedirectView redirectAfterChange(@ModelAttribute OrderDto orderDto) {
+        System.out.println(orderDto.id());
+        System.out.println(orderDto.userId());
+        System.out.println(orderDto.menuId());
+        System.out.println(orderDto.quantity());
+        System.out.println(orderDto.priceAtOrder());
+        System.out.println(orderDto.orderDate());
         OrderDto oldOrder = orderService.getOrderById(orderDto.id());
-        orderService.deleteOrder(oldOrder);
-        orderService.changeOrder(orderDto);
+        orderService.changeOrder(oldOrder, orderDto);
         return new RedirectView("/orders");
     }
 
