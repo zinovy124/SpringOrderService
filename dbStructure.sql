@@ -13,7 +13,7 @@ CREATE TABLE menu (
     price INT
 );
 
-CREATE TABLE `order` (
+CREATE TABLE orders (
     id INT PRIMARY KEY AUTO_INCREMENT, -- 고유 식별자 추가
     user_id INT REFERENCES user(id) ON DELETE CASCADE,
     menu_id INT REFERENCES menu(id) ON DELETE CASCADE,
