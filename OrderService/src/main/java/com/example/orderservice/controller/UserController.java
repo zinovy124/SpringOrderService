@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
-@RequestMapping("/register")
+//@RequestMapping("/register")
 public class UserController {
     private final UserService userService;
 
@@ -15,8 +15,10 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping
+    @PostMapping("/register")
     public RedirectView registerUser(@ModelAttribute UserDto userDto) {
+        System.out.println(userDto.id());
+        System.out.println(userDto.name());
         UserDto addedUser = userService.addUser(userDto);
         return new RedirectView("/menu");
     }

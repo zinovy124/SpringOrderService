@@ -2,7 +2,7 @@ package com.example.orderservice.dto;
 
 import com.example.orderservice.entity.User;
 
-public record UserDto(int id, String name) {
+public record UserDto(Integer id, String name) {
     public static UserDto fromEntity(User user) {
         return new UserDto(
                 user.getId(),
