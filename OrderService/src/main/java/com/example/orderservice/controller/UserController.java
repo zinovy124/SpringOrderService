@@ -6,16 +6,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
-@RestController
-//@RequestMapping("/register")
+@Controller
+@RequestMapping("/register")
 public class UserController {
     private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
     }
+    @GetMapping
+    public String view() {
+        return "register";
+    }
 
-    @PostMapping("/register")
+    @PostMapping
     public RedirectView registerUser(@ModelAttribute UserDto userDto) {
         System.out.println(userDto.id());
         System.out.println(userDto.name());
