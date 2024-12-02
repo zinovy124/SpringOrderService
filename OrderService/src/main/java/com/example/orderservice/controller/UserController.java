@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
-@Controller
+@RestController
 @RequestMapping("/register")
 public class UserController {
     private final UserService userService;
@@ -21,7 +21,7 @@ public class UserController {
 
     @PostMapping
     public RedirectView registerUser(@ModelAttribute UserDto userDto) {
-        System.out.println(userDto.id());
+        System.out.println(userDto.email());
         System.out.println(userDto.name());
         UserDto addedUser = userService.addUser(userDto);
         return new RedirectView("/menu");

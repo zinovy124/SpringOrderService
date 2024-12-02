@@ -29,7 +29,7 @@ public class OrderService {
     }
 
     public OrderDto createOrder(OrderDto orderDto) {
-        User user = userRepository.findById(orderDto.userId()).orElseThrow(() -> new RuntimeException("User Not Found"));
+        User user = userRepository.findByEmail(orderDto.userEmail()).orElseThrow(() -> new RuntimeException("User Not Found"));
         Menu menu = menuRepository.findById(orderDto.menuId()).orElseThrow(() -> new RuntimeException("Menu Not Found"));
 
         Order order = OrderDto.toEntity(orderDto, user, menu);
@@ -38,13 +38,13 @@ public class OrderService {
     }
 
     public void deleteOrder(OrderDto orderDto) {
-        User user = userRepository.findById(orderDto.userId()).orElseThrow(() -> new RuntimeException("User Not Found"));
+        User user = userRepository.findByEmail(orderDto.userEmail()).orElseThrow(() -> new RuntimeException("User Not Found"));
         Order order = orderRepository.findById(orderDto.id()).orElseThrow(() -> new RuntimeException("Order Not Found"));
         orderRepository.delete(order);
     }
 
     public void changeOrder(OrderDto newOrder) {
-        User user = userRepository.findById(newOrder.userId()).orElseThrow(() -> new RuntimeException("User Not Found"));
+        User user = userRepository.findByEmail(newOrder.userEmail()).orElseThrow(() -> new RuntimeException("User Not Found"));
         Menu newMenu = menuRepository.findById(newOrder.menuId()).orElseThrow(() -> new RuntimeException("Menu Not Found"));
 
         Order newOrderEntity = OrderDto.toEntity(newOrder, user, newMenu);

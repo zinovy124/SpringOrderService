@@ -7,28 +7,32 @@ import java.util.List;
 @Entity
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private String email;
     private String name;
+    private String password;
+    private String profileImagePath;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Order> orders;
 
     public User() {}
 
-    public User(String name) {
+    public User(String email, String name, String password, String profileImagePath) {
+        this.email = email;
         this.name = name;
+        this.password = password;
+        this.profileImagePath = profileImagePath;
     }
 
-    public int getId() {
-        return id;
+    public String getEmail() {
+        return email;
     }
 
     public String getName() {
         return name;
     }
 
-    public List<Order> getOrders() {
-        return orders;
+    public String getProfileImagePath() {
+        return profileImagePath;
     }
 }
