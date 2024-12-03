@@ -11,17 +11,19 @@
     const handleSubmit = async () => {
         const formData = new FormData();
         formData.append('email', email);
-        formData.append('password', password);
+        formData.append('rawPassword', password);
         formData.append('name', name);
         formData.append('profileImage', profileImage);
 
-        const response = await fetch('/api/register', {
+        const response = await fetch('http://127.0.0.1:8080/api/register', {
             method: 'POST',
             body: formData
         });
 
         if (response.ok) {
             alert('Registration successful!');
+        } else if(response.status === 409) {
+            alert('Email aleady exists.');
         } else {
             alert('Failed to register. Please try again.');
         }
