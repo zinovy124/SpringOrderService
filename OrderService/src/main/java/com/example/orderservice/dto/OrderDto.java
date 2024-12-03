@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 public record OrderDto(
         Integer id,
-        Integer userId,
+        String userEmail,
         Integer menuId,
         int quantity,
         int priceAtOrder,
@@ -19,7 +19,7 @@ public record OrderDto(
     public static OrderDto fromEntity(Order order) {
         return new OrderDto(
                 order.getId(),
-                order.getUser().getId(),
+                order.getUser().getEmail(),
                 order.getMenu().getId(),
                 order.getQuantity(),
                 order.getPriceAtOrder(),

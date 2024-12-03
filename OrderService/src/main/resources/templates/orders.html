@@ -83,7 +83,7 @@
         <!-- Thymeleaf 반복문으로 주문 리스트 렌더링 -->
         <tr th:each="order : ${orders}">
             <td th:text="${order.id}">1</td>
-            <td th:text="${order.userId}">101</td>
+            <td th:text="${order.userEmail}">101</td>
             <td th:text="${order.menuId}">2</td>
             <td th:text="${order.quantity}">3</td>
             <td th:text="${order.priceAtOrder}">5000</td>
