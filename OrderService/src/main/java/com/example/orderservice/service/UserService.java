@@ -61,4 +61,9 @@ public class UserService {
         }
         return profileImagePath;
     }
+
+    public boolean authenticate(String email, String rawPassword) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User Not Found"));
+        return passwordEncoder.matches(rawPassword, user.getPassword());
+    }
 }
