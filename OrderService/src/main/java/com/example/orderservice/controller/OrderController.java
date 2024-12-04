@@ -4,6 +4,8 @@ import com.example.orderservice.dto.OrderDto;
 import com.example.orderservice.entity.Order;
 import com.example.orderservice.repository.OrderRepository;
 import com.example.orderservice.service.OrderService;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("/api")
 public class OrderController {
     private final OrderService orderService;
 
@@ -22,13 +24,13 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-//    @PostMapping
-//    public ResponseEntity<OrderDto> createOrder(@RequestBody OrderDto orderDto) {
-//        OrderDto createOrder = orderService.createOrder(orderDto);
-//        return ResponseEntity.ok(createOrder);
-//    }
+    /*@PostMapping
+    public ResponseEntity<OrderDto> createOrder(@RequestBody OrderDto orderDto) {
+        OrderDto createOrder = orderService.createOrder(orderDto);
+        return ResponseEntity.ok(createOrder);
+    }*/
 
-    @PostMapping
+    /*@PostMapping
     public RedirectView createOrder(@ModelAttribute OrderDto orderDto) {
         OrderDto order = orderService.createOrder(orderDto);
         return new RedirectView("/orders");
@@ -66,5 +68,49 @@ public class OrderController {
         OrderDto orderDto = orderService.getOrderById(orderId);
         orderService.deleteOrder(orderDto);
         return new RedirectView("/orders");
+    }*/
+    @PostMapping("/order")
+    public ResponseEntity<String> placeOrder(
+            @RequestBody OrderDto orderDto,
+            HttpSession session
+    ) {
+        String email = (String) session.getAttribute("user");
+        if (email == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You must logged in to place an order.");
+        }
+
+        OrderDto order = orderService.createOrder(orderDto, email);
+        if (order == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Order Failed");
+        } else {
+            return ResponseEntity.ok("Order Successfully Placed");
+        }
+    }
+
+    @GetMapping("/order")
+    public ResponseEntity<List<OrderDto>> getUserOrders(HttpSession session) {
+        String email = (String) session.getAttribute("user");
+        if (email == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        List<OrderDto> userOrders = orderService.getAllOrders(email);
+        return ResponseEntity.ok(userOrders);
+    }
+
+    @DeleteMapping("/{orderId}")
+    public ResponseEntity<String> deleteOrder(@PathVariable Integer orderId, HttpSession session) {
+        String email = (String) session.getAttribute("user");
+        if (email == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You must be logged in to delete an order");
+        }
+
+        boolean deleted = orderService.deleteOrder(orderId, email);
+
+        if (deleted) {
+            return ResponseEntity.ok("Order deleted successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found or not authorized");
+        }
     }
 }

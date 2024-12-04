@@ -2,8 +2,12 @@ package com.example.orderservice.controller;
 
 import com.example.orderservice.dto.RegisterDto;
 import com.example.orderservice.dto.UserDto;
+import com.example.orderservice.entity.User;
 import com.example.orderservice.service.UserService;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.http.CacheControl;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -70,6 +74,29 @@ public class UserController {
     public ResponseEntity<String> logout(HttpSession session) {
         session.invalidate();
         return ResponseEntity.ok("Logout successful");
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<UserDto> loginCheck(HttpSession session) {
+        System.out.println(session);
+        String email = (String) session.getAttribute("user");
+        System.out.println(email);
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setCacheControl(CacheControl.noStore());
+//        headers.set("Set-Cookie", "");
+        System.out.println(session.getId() + " " + session.isNew());
+        System.out.println(email);
+        if (email == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        User user = userService.findByEmail(email);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        UserDto userDto = UserDto.fromEntity(user);
+        return ResponseEntity.ok(userDto);
     }
 
 }

@@ -66,4 +66,8 @@ public class UserService {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User Not Found"));
         return passwordEncoder.matches(rawPassword, user.getPassword());
     }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User Not Found"));
+    }
 }
