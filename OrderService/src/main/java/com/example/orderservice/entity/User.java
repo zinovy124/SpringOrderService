@@ -36,7 +36,7 @@ public class User {
         return profileImagePath;
     }
 
-    public String getRawPassword() {
+    public String getPassword() {
         return password;
     }
 }

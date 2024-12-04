@@ -3,6 +3,7 @@ package com.example.orderservice.controller;
 import com.example.orderservice.dto.RegisterDto;
 import com.example.orderservice.dto.UserDto;
 import com.example.orderservice.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -46,5 +47,29 @@ public class UserController {
 //        UserDto addedUser = userService.addUser(userDto);
 //        return new RedirectView("/menu");
 //    }
+    @PostMapping("/login")
+    public ResponseEntity<String> login(
+            @RequestParam String email,
+            @RequestParam String password,
+            HttpSession session
+    ) {
+        try {
+            boolean authenticated = userService.authenticate(email, password);
+            if (authenticated) {
+                session.setAttribute("user", email);
+                return ResponseEntity.ok("Login successful");
+            } else {
+                return ResponseEntity.status(401).body("Invalid email or password");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("An error occurred" + e.getMessage());
+        }
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<String> logout(HttpSession session) {
+        session.invalidate();
+        return ResponseEntity.ok("Logout successful");
+    }
 
 }
