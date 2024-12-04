@@ -1,6 +1,10 @@
 <script>
-    export let params;
-    let menuId = params.menuId;
+    /**
+     * @type {{ data: import('./$types').PageData }}
+     */
+    let { data } = $props();
+    // export let params;
+    let menuId = data.menuId;
 
     let quantity = 1;
     let totalPrice = 0;
