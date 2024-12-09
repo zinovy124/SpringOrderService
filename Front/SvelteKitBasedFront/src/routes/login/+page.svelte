@@ -7,14 +7,18 @@
         formData.append('email', email);
         formData.append('password', password);
 
-        const response = await fetch('http://127.0.0.1:8080/api/login', {
+        const response = await fetch('http://localhost:8080/api/login', {
             method: 'POST',
-            body: formData
+            // headers: {
+            //     'Content-Type' : 'application/x-www-form-urlencoded',
+            // },
+            body: formData,
+            credentials: 'include',
         });
 
         if (response.ok) {
             alert('Login successful!');
-            window.location.href = '/orders'; // 로그인 성공 시 주문 페이지로 이동
+            window.location.href = '/menu'; // 로그인 성공 시 주문 페이지로 이동
         } else if (response.status === 401) {
             alert('Invalid email or password. Please try again.');
         } else {
@@ -24,7 +28,7 @@
 </script>
 
 <style>
-    body {
+    :global(body) {
         font-family: 'Arial', sans-serif;
         background-color: #fef5f3;
         margin: 0;

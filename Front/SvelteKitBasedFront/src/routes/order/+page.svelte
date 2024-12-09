@@ -1,11 +1,29 @@
 <script>
-    let orders = [
-        { id: 1, menuName: 'Pizza', quantity: 2, totalPrice: 24000 },
-        { id: 2, menuName: 'Burger', quantity: 1, totalPrice: 8000 },
-    ];
+  import { onMount } from "svelte";
+
+    let orders = [];
+
+    const fetchOrders = async () => {
+        const response = await fetch('http://localhost:8080/api/order', {
+            method: 'GET',
+            credentials: 'include',
+        })
+
+        if (response.ok) {
+            orders = await response.json();
+        } else if (response.status === 401) {
+            alert('You must be logged in to view your orders');
+        } else {
+            alert('Failed to fetch orders');
+        }
+    };
+
+    onMount(() => {
+        fetchOrders();
+    });
 
     const deleteOrder = async (orderId) => {
-        const response = await fetch(`/api/orders/${orderId}`, { method: 'DELETE' });
+        const response = await fetch(`http://localhost:8080/api/order/${orderId}`, { method: 'DELETE' });
         if (response.ok) {
             alert('Order deleted successfully!');
             orders = orders.filter((order) => order.id !== orderId);

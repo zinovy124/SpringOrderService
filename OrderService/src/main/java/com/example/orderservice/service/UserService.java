@@ -3,17 +3,15 @@ package com.example.orderservice.service;
 import com.example.orderservice.dto.UserDto;
 import com.example.orderservice.entity.User;
 import com.example.orderservice.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.image.ImagingOpException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -62,8 +60,34 @@ public class UserService {
         return profileImagePath;
     }
 
-    public boolean authenticate(String email, String rawPassword) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User Not Found"));
-        return passwordEncoder.matches(rawPassword, user.getPassword());
+    public boolean login(String email, String rawPassword, HttpSession session) {
+        try {
+            User user = this.findByEmail(email);
+            if (passwordEncoder.matches(rawPassword, user.getPassword())) {
+                System.out.println("Login successful by user: " + user.getEmail());
+                session.setAttribute("user", user.getEmail());
+                return true;
+            } else {
+                System.out.println("Login failed");
+                return false;
+            }
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
+    public User loginCheckBySession(HttpSession session) {
+        try {
+            String userEmail = (String)session.getAttribute("user");
+            return this.findByEmail(userEmail);
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User Not Found"));
     }
 }
