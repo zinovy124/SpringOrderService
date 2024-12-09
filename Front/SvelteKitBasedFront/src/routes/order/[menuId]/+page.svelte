@@ -7,26 +7,35 @@
     let { data } = $props();
     // export let params;
     let orderId = Math.floor(Math.random() * 10000);
-    let userId = data.userId;
+    let userId = null;
     let menuId = data.menuId;
     let date = new Date();
-    let dateString = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}T${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+    // let dateString = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}T${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
 
     let quantity = writable(1);
     let totalPrice = derived(quantity, $quantity => $quantity * 10000);
 
     const submitOrder = async () => {
+        userId = await fetch(`http://localhost:8080/api/user`, {
+            method: 'GET',
+            credentials: 'include'
+        });
+
+        userId = await userId.json();
+        userId = userId.email;
+        console.log(userId);
+
         const response = await fetch(`http://localhost:8080/api/order`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
             body: JSON.stringify({
-                id: orderId,
+                id: parseInt(orderId),
                 userEmail: userId,
                 menuId: parseInt(menuId),
-                quantity,
-                priceAtOrder: $totalPrice,
-                orderDate: dateString,
+                quantity: parseInt(quantity),
+                priceAtOrder: parseInt($totalPrice),
+                orderDate: date.toISOString(),
             }),
         });
 

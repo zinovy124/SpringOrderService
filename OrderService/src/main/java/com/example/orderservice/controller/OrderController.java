@@ -71,7 +71,7 @@ public class OrderController {
     }*/
     @PostMapping("/order")
     public ResponseEntity<String> placeOrder(
-            @ModelAttribute OrderDto orderDto,
+            @RequestBody OrderDto orderDto,
             HttpSession session
     ) {
         System.out.println(orderDto.id() + " " + orderDto.menuId() + " " + orderDto.userEmail());

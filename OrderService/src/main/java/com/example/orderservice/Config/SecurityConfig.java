@@ -22,12 +22,13 @@ public class SecurityConfig {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/login", "/api/register", "/api/user", "/api/order").permitAll()
+                                .anyRequest().permitAll()
+//                        .requestMatchers("/api/login", "/api/register", "/api/user", "/api/order").permitAll()
 //                        .requestMatchers("/api/order").authenticated() 일단 SpringSecurity 에선 비활성화 후 비즈니스 로직으로 잡는다.
                 )
                 .sessionManagement(session -> session
-                        .sessionFixation().migrateSession()
-                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                        .sessionFixation().none()
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 );
 
         return http.build();

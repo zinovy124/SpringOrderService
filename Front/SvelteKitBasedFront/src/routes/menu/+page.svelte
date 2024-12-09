@@ -8,7 +8,7 @@
     let menuItems = [
         { id: 1, name: 'Pizza', price: 12000 },
         { id: 2, name: 'Burger', price: 8000 },
-        { id: 3, name: 'Pasta', price: 10000 },
+        { id: 3, name: 'Chicken', price: 20000 },
     ];
 
     // 로그인 여부 확인 및 사용자 정보 가져오기

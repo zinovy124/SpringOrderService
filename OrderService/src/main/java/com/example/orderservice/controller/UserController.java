@@ -58,9 +58,8 @@ public class UserController {
             HttpSession session
     ) {
         try {
-            boolean authenticated = userService.authenticate(email, password);
+            boolean authenticated = userService.login(email, password, session);
             if (authenticated) {
-                session.setAttribute("user", email);
                 return ResponseEntity.ok("Login successful");
             } else {
                 return ResponseEntity.status(401).body("Invalid email or password");
@@ -78,23 +77,19 @@ public class UserController {
 
     @GetMapping("/user")
     public ResponseEntity<UserDto> loginCheck(HttpSession session) {
-        System.out.println(session.getAttribute("user"));
-        String email = (String) session.getAttribute("user");
-        System.out.println(email);
+        System.out.println("Session Check: " + session.getAttribute("user"));
+//        String email = (String) session.getAttribute("user");
+//        System.out.println(email);
 //        HttpHeaders headers = new HttpHeaders();
 //        headers.setCacheControl(CacheControl.noStore());
 //        headers.set("Set-Cookie", "");
 //        System.out.println(session.getId() + " " + session.isNew());
 //        System.out.println(email);
-        if (email == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        User user = userService.findByEmail(email);
+        User user = userService.loginCheckBySession(session);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-
+        System.out.println("Login Checked");
         UserDto userDto = UserDto.fromEntity(user);
         return ResponseEntity.ok(userDto);
     }
