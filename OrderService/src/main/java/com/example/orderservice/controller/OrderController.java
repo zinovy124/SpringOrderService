@@ -71,11 +71,13 @@ public class OrderController {
     }*/
     @PostMapping("/order")
     public ResponseEntity<String> placeOrder(
-            @RequestBody OrderDto orderDto,
+            @ModelAttribute OrderDto orderDto,
             HttpSession session
     ) {
+        System.out.println(orderDto.id() + " " + orderDto.menuId() + " " + orderDto.userEmail());
         String email = (String) session.getAttribute("user");
         if (email == null) {
+            System.out.println("Fuck you");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You must logged in to place an order.");
         }
 

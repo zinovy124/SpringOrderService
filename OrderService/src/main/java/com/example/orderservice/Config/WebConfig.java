@@ -10,7 +10,6 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:5173")
                 .allowedMethods("*")
-                .allowCredentials(true)
-                .maxAge(600);
+                .allowCredentials(true);
     }
 }

@@ -4,7 +4,7 @@
     let orders = [];
 
     const fetchOrders = async () => {
-        const response = await fetch('http://127.0.0.1:8080/api/order', {
+        const response = await fetch('http://localhost:8080/api/order', {
             method: 'GET',
             credentials: 'include',
         })
@@ -23,7 +23,7 @@
     });
 
     const deleteOrder = async (orderId) => {
-        const response = await fetch(`http://127.0.0.1:8080/api/order/${orderId}`, { method: 'DELETE' });
+        const response = await fetch(`http://localhost:8080/api/order/${orderId}`, { method: 'DELETE' });
         if (response.ok) {
             alert('Order deleted successfully!');
             orders = orders.filter((order) => order.id !== orderId);

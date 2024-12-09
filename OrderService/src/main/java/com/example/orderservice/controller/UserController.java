@@ -78,14 +78,14 @@ public class UserController {
 
     @GetMapping("/user")
     public ResponseEntity<UserDto> loginCheck(HttpSession session) {
-        System.out.println(session);
+        System.out.println(session.getAttribute("user"));
         String email = (String) session.getAttribute("user");
         System.out.println(email);
 //        HttpHeaders headers = new HttpHeaders();
 //        headers.setCacheControl(CacheControl.noStore());
 //        headers.set("Set-Cookie", "");
-        System.out.println(session.getId() + " " + session.isNew());
-        System.out.println(email);
+//        System.out.println(session.getId() + " " + session.isNew());
+//        System.out.println(email);
         if (email == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

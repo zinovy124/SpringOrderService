@@ -20,7 +20,7 @@
 
         if (response.ok) {
             user = await response.json(); // 사용자 정보
-            console.log(user);
+            console.log("Session Checked: ", user);
         } else if (response.status === 403) {
             alert('Access denied. Please log in.');
             window.location.href = '/login';

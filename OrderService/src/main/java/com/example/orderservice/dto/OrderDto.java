@@ -11,8 +11,8 @@ public record OrderDto(
         Integer id,
         String userEmail,
         Integer menuId,
-        int quantity,
-        int priceAtOrder,
+        Integer quantity,
+        Integer priceAtOrder,
         @DateTimeFormat(pattern = "yyyy-MM-dd\'T\'HH:mm")
         LocalDateTime orderDate
 ) {

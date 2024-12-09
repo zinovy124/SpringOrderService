@@ -1,28 +1,38 @@
 <script>
+  import { derived, writable } from 'svelte/store';
+
     /**
      * @type {{ data: import('./$types').PageData }}
      */
     let { data } = $props();
     // export let params;
+    let orderId = Math.floor(Math.random() * 10000);
+    let userId = data.userId;
     let menuId = data.menuId;
+    let date = new Date();
+    let dateString = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}T${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
 
-    let quantity = 1;
-    let totalPrice = 0;
+    let quantity = writable(1);
+    let totalPrice = derived(quantity, $quantity => $quantity * 10000);
 
     const submitOrder = async () => {
-        const response = await fetch(`http://127.0.0.1:8080/api/order`, {
+        const response = await fetch(`http://localhost:8080/api/order`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
             body: JSON.stringify({
+                id: orderId,
+                userEmail: userId,
                 menuId: parseInt(menuId),
                 quantity,
-                priceAtOrder: totalPrice,
+                priceAtOrder: $totalPrice,
+                orderDate: dateString,
             }),
         });
 
         if (response.ok) {
             alert('Order placed successfully!');
-            window.location.href = '/orders';
+            window.location.href = '/order';
         } else {
             alert('Failed to place order. Please try again.');
         }
@@ -63,6 +73,6 @@
     <p>Menu ID: {menuId}</p>
     <label for="quantity">Quantity: </label>
     <input type="number" id="quantity" bind:value={quantity} min="1" />
-    <p>Total Price: ₩{quantity * 10000}</p>
+    <p>Total Price: ₩{$totalPrice}</p>
     <button on:click={submitOrder}>Place Order</button>
 </div>
